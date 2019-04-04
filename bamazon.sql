@@ -7,7 +7,13 @@ CREATE TABLE products(
     product_name VARCHAR(30) NOT NULL,
     department_name VARCHAR(30) NOT NULL,
     price INTEGER NOT NULL,
-    stock_quantity INTEGER NOT NULL
+    stock_quantity INTEGER NOT NULL,
+    product_sales INTEGER(50) DEFAULT 0
+);
+CREATE TABLE departments(
+	department_id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    department_name VARCHAR(50) NOT NULL,
+    over_head_costs INTEGER NOT NULL
 );
 INSERT INTO products(product_name, department_name, price, stock_quantity)
 VALUES("bananas", "produce", 1.00, 50),
@@ -21,4 +27,14 @@ VALUES("bananas", "produce", 1.00, 50),
 ("whey", "essentials", 50.00, 20),
 ("scrunchies", "fashion", 1.00, 12);
 
+INSERT INTO departments(department_name, over_head_costs)
+VALUES("fashion", 15000),
+	("essentials", 20000),
+    ("athletic", 25000),
+    ("awesome", 20000),
+    ("dairy", 10000),
+    ("contraceptives", 8000),
+    ("automotive", 35000),
+    ("produce", 5000);
 SELECT * FROM products;
+SELECT * FROM departments;

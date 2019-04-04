@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+const cTable = require('console.table');
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -53,27 +54,26 @@ function askCustomer() {
 
 function checkWares(id, amount) {
     console.log("Checking wares...\n");
-    var query = connection.query("SELECT * FROM products WHERE item_id=?", 
+    connection.query("SELECT * FROM products WHERE item_id=?", 
     [id],
     function(err, res) {
         if(err) throw err;
         var stores = res[0].stock_quantity;
         var product = res[0].product_name;
+        var price = res[0].price;
+        var id = res[0].item_id;
         if(amount > stores) {
             console.log("We're sorry, but we do not have at least " + amount + " " + product + "\n");
             askCustomer();
         } else {
             stores = stores - amount;
             console.log("You want to purchase " + amount+ " " + product + "\n");
-            updateData(id, stores);
-            givePrice(id, amount);
+            updateData(id, stores, amount, price);
         }
     });
-    console.log(query.sql);
 }
-
-function updateData(id, stores) {
-    var query = connection.query("UPDATE products SET ? WHERE ?",
+function updateData(id, stores, amount, price) {
+    connection.query("UPDATE products SET ? WHERE ?",
     [
         {
             stock_quantity: stores
@@ -84,20 +84,45 @@ function updateData(id, stores) {
     ],
         function(err, res) {
             if(err) throw err;
-            connection.end();
+            givePrice(id, stores, amount, price);
         }
     );
-    console.log(query.sql);
 }
-function givePrice(id, amount) {
-    var query = connection.query("SELECT price FROM products WHERE ?",
+function givePrice(id, stores, amount, price) {
+    connection.query("SELECT price FROM products WHERE ?",
     {
         item_id: id
     },
         function(err, res) {
             if(err) throw err;
-            var price = res[0].price * amount;
-            console.log("Your total is $" + price);
+            var totalPrice = res[0].price * amount;
+            console.log("Your total is $" + totalPrice);
+            updateDatabase(id, amount, price);
         }
     );
+}
+function updateDatabase(id, price, amount) {
+    connection.query("SELECT * FROM products WHERE ?",
+    [{item_id:id}],
+    function(err, res) {
+        if(err) throw err;
+        var prodSale = res[0].product_sales;
+        var newTotal = (amount * price) + prodSale;
+        // console.log(newTotal, amount, price, prodSale);
+        updateSales(id, newTotal);
+    });
+}
+function updateSales(id, newTotal) {
+    connection.query("UPDATE products SET ? WHERE ?",
+    [{
+        product_sales: newTotal
+    },
+    {
+        item_id: id
+    }],
+    function(err, res) {
+        if(err) throw err;
+        // console.log(res);
+        askCustomer();
+    });
 }

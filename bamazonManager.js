@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+const cTable = require('console.table');
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -19,7 +20,30 @@ function introManager() {
         {
             name: "task",
             type: "list",
-            message: "Greetings, manager. Which task are you performing?",
+            message: "Greetings, manager. Which task are you performing?\n",
+            choices: ["View Products for Sale",
+            "View Low Inventory",
+            "Add to Inventory",
+            "Add New Product"]
+        }
+    ]).then(function(answer) {
+        if(answer.task === "View Products for Sale") {
+            viewProducts();
+        } else if(answer.task === "View Low Inventory") {
+            viewLow();
+        } else if(answer.task === "Add to Inventory") {
+            addInventory();
+        } else if(answer.task === "Add New Product") {
+            addNewProduct();
+        }
+    });
+}
+function moreTasks() {
+    inquirer.prompt([
+        {
+            name: "task",
+            type: "list",
+            message: "Would you like to perform another task?\n",
             choices: ["View Products for Sale",
             "View Low Inventory",
             "Add to Inventory",
@@ -38,19 +62,20 @@ function introManager() {
     });
 }
 function viewProducts() {
-    var query = connection.query("SELECT * FROM products", 
+    connection.query("SELECT * FROM products", 
         function(err, res) {
             if(err) throw err;
-            console.log("id | " + "product |" + "department |" + "price |" + "amount");
+            console.log("id | " + "product |" + "department |" + "price |" + "amount\n");
             for(var i = 0; i < res.length; i++) {
                 console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + res[i].price + " | " + res[i].stock_quantity);
             }
+            console.log("\n");
+            moreTasks();
         }
     );
-    console.log(query.sql);
 }
 function viewLow() {
-    var query = connection.query("SELECT * FROM products WHERE stock_quantity<?", 
+    connection.query("SELECT * FROM products WHERE stock_quantity<?", 
     [5],
     function(err, res) {
         if(err) throw err;
@@ -58,47 +83,117 @@ function viewLow() {
         for(var i = 0; i < res.length; i++) {
         console.log(i+1 + ") " + res[i].product_name);
         }
+        console.log("\n");
+        moreTasks();
     });
 }
 function addInventory() {
     var items = [];
-    var query = connection.query("SELECT * FROM products",
+    connection.query("SELECT * FROM products",
     function(err, res) {
         if(err) throw err;
         for(var i = 0; i < res.length; i ++) {
-            // console.log(res[i].product_name);
             items.push(res[i].product_name);
         }
-        // console.log(items);
-    });
-    inquirer.prompt([
-        {
-            name: "productChoice",
-            type: "list",
-            message: "Which product would you like to replenish?\n",
-            choices: [items]
-        },
-        {
-            name: "add",
-            type: "input",
-            message: "How many would you like to add to the inventory?\n"
-        }
-    ]).then(function(err, res) {
+        inquirer.prompt([
+            {
+                name: "productChoice",
+                type: "list",
+                message: "Which product would you like to replenish?\n",
+                choices: items
+            },
+            {
+                name: "add",
+                type: "input",
+                message: "How many would you like to add to the inventory?\n"
+            }
+        ]).then(function(answer) {
+            checkWares(answer.productChoice, answer.add);
+        });
+    });  
+}
+function checkWares(product, add) {
+    connection.query("SELECT * FROM products WHERE ?",
+    {product_name:product}, function(err, res) {
         if(err) throw err;
-
+        var stock = res[0].stock_quantity;
+        addWares(stock, product, add);
     });
 }
-// function returnArray() {
-//     var items = [];
-//     var query = connection.query("SELECT * FROM products",
-//     function(err, res) {
-//         if(err) throw err;
-//         for(var i = 0; i < res.length; i ++) {
-//             // console.log(res[i].product_name);
-//             items.push(res[i].product_name);
-//         }
-//         // console.log(items);
-//     });
-//     console.log(query.sql);
-//     return items;
-// }
+function addWares(stock, answer, add) {
+    var total = parseInt(stock) + parseInt(add);
+    console.log(stock, total, add);
+    console.log(answer);
+    connection.query("UPDATE products SET ? WHERE ?",
+    [
+        {
+            stock_quantity: total
+        },
+        {
+            product_name: answer
+        }
+    ]
+    ,function(err, res2) {
+            if(err) throw err;
+            console.log("You have added " + add + " " +
+             answer + " to the inventory\n");
+             moreTasks();
+        }
+    );
+}
+function addNewProduct() {
+    var items = [];
+    connection.query("SELECT * FROM products",
+    function(err, res) {
+    if(err) throw err;
+    for(var i = 0; i < res.length; i ++) {
+        items.push(res[i].department_name);
+    }
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "What product would you like to add to Wesley's Wares?\n",
+            name: "product"
+        },
+        {
+            type: "list",
+            message: "Which department will this item be placed?\n",
+            choices: items,
+            name: "department"
+        },
+        {
+            type: "input",
+            message: "How many items will be added to the stock?\n",
+            name: "quantity"
+        },
+        {
+            type: "input",
+            message: "How much will one cost?\n",
+            name: "cost"
+        }
+    ]).then(function(answer) {
+        var prod = answer.product;
+        var dep = answer.department;
+        var price = answer.cost;
+        var stock = answer.quantity;
+        var query = connection.query("INSERT INTO products SET ?",
+        {
+            product_name: prod,
+            department_name: dep,
+            price: price,
+            stock_quantity: stock
+        },
+        function(err, res) {
+            if(err) throw err;
+            console.log("You added:\n" + 
+            "Product: " + prod + "\n" + 
+            "Department: " + dep + "\n" +
+            "Quantity: " + stock + "\n" +
+            "Price: " + price + "\n");
+            moreTasks();
+        }
+    );
+    });
+    }
+    );
+}
