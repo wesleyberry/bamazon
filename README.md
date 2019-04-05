@@ -5,12 +5,12 @@ Bamazon simulates a store from three unique perspectives: the customer, the mana
 - - - 
 #### Examples of bamazon's functionality:
 The program's three modules are demonstrated below.
-1. Bamazon Customer
+1. Bamazon Customer  
 The user can use this module by supplying two values:
 * An Id associated with a wanted product
-* How many of this product are to be purchased
+* How many of this product are to be purchased.
 View a demonstration of [Bamazon Customer](/screenshots/customer/bamazon.mp4).
-2. Bamazon Manager
+2. Bamazon Manager  
 The user can use this module by first selecting a task to perform:
 * View Products for Sale 
 * View Low Inventory
@@ -20,11 +20,11 @@ The user can use this module by first selecting a task to perform:
 * Add New Product
   * This allows the user to add a product to the inventory based on the product's name, department, quantity and price.
   View a demonstration of [Bamazon Manager](/screenshots/manager).
-3. Bamazon Supervisor
+3. Bamazon Supervisor  
 The user can use this module by selecting either option:
 * View Product Sales by Department
 * Create New Department
- * This allows the user to create a department based on it's name and over head.
+  * This allows the user to create a department based on it's name and over head.
 View a demonstration of [Bamazon Supervisor](/screenshots/supervisor).
 - - - 
 ## Why bamazon is useful 
