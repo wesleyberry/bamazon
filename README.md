@@ -2,6 +2,7 @@
 ## What bamazon does
 #### bamazon's functionalities:
 Bamazon simulates a store from three unique perspectives: the customer, the manager, or supervisor. Store data are created, read, updated, and deleted in sql. Bamazon utilizes the following technologies: Javascript, MySQL, and Node.js. In addition to these technologies, inquirer, mysql, and console.table node modules are used. 
+- - - 
 #### Examples of bamazon's functionality:
 The program's three modules are demonstrated below.
 1. Bamazon Customer
@@ -25,10 +26,13 @@ The user can use this module by selecting either option:
 * Create New Department
  * This allows the user to create a department based on it's name and over head.
 View a demonstration of [Bamazon Supervisor](/screenshots/supervisor).
+- - - 
 ## Why bamazon is useful 
 This application allows the user to manipulate data that are stored in a database. 
 ## How users can get started with bamazon
+- - -
 Users can get started with bamazon by installing the node_modules. Dependencies are found in the [JSON file](/package.json).
+- - -
 ## Where users can get help with bamazon
 Developer Wesley Berry's email: wesleyberry52@gmail.com
 
