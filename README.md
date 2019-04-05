@@ -8,7 +8,7 @@ The program's three modules are demonstrated below.
 The user can use this module by supplying two values:
 * An Id associated with a wanted product
 * How many of this product are to be purchased
-View a demonstration of Bamazon Customer [here](/screenshots/bamazon.mp4).
+View a demonstration of [Bamazon Customer](/screenshots/customer/bamazon.mp4).
 2. Bamazon Manager
 The user can use this module by first selecting a task to perform:
 * View Products for Sale 
@@ -18,12 +18,13 @@ The user can use this module by first selecting a task to perform:
   * This allows the user to replenish any existing product.
 * Add New Product
   * This allows the user to add a product to the inventory based on the product's name, department, quantity and price.
-  View a demonstration of Bamazon Manager [here](/screenshots/manager.webm).
+  View a demonstration of [Bamazon Manager](/screenshots/manager).
 3. Bamazon Supervisor
 The user can use this module by selecting either option:
 * View Product Sales by Department
 * Create New Department
  * This allows the user to create a department based on it's name and over head.
+View a demonstration of [Bamazon Supervisor](/screenshots/supervisor).
 ## Why bamazon is useful 
 This application allows the user to manipulate data that are stored in a database. 
 ## How users can get started with bamazon
