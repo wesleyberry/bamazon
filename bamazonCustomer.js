@@ -39,11 +39,11 @@ function askCustomer() {
             type: "input",
             message: "How many of this item would you like to purchase?\n",
             name: "amount",
-            validate: function (value) {
-                if (isNaN(value) === false) {
-                    return true;
+            validate: function(value) {
+                if((value < 0) || (isNaN(value) === true)) {
+                    return false;
                 }
-                return false;
+                return true;
             }
         }
     ]).then(function (answer) {
