@@ -29,8 +29,8 @@ View a demonstration of [Bamazon Supervisor](/screenshots/supervisor).
 - - - 
 ## Why bamazon is useful 
 This application allows the user to manipulate data that are stored in a database using a run-time Javascript environment.
-## How users can get started with bamazon
 - - -
+## How users can get started with bamazon
 Users can get started with bamazon by installing the node_modules. Dependencies are found in the [JSON file](/package.json).
 - - -
 ## Where users can get help with bamazon
