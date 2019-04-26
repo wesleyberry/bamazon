@@ -42,4 +42,4 @@ Find Wesley Berry on
 * [LinkedIn](https://www.linkedin.com/in/wesley-berry-89742317a) 
 * [GitHub](https://github.com/wesleyberry) 
 
-* or check out his [online portfolio](https://wesleyberry.github.io/Responsive-Portfolio/).
+* or check out his [online portfolio](https://wesleyberry.github.io/Personal_Portfolio/).
